@@ -13,3 +13,4 @@ AccountcreationDate date
 describe customers;
 
 select * from customers;
+
