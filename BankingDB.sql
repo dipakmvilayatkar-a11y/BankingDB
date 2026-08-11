@@ -423,9 +423,71 @@ UPDATE accounts
 SET BranchID = '002'
 WHERE AccountID = 208;
 
-select AccountID,Accounttype,Balance,
+SELECT 
+    AccountID,
+    Accounttype,
+    Balance,
+    CASE
+        WHEN balance >= 50000 THEN 'High Value Customer'
+        ELSE 'Low Value Customer'
+    END AS CustomerCategory
+FROM
+    accounts;
+    
+-- categorize the deposits in the transactions table as conditions given
+-- if above 10000(included)High Amount
+-- if 5000 to 10000 midium amount
+-- if upto 5000 low amount
+-- for the transaction type withdrawl"Not applicable"
+SELECT 
+    TransactionID,
+    Amount,
+    TransactionType,
+    CASE
+    WHEN TransactionType = 'Withdrawl' THEN 'Not Applicable'
+        WHEN Amount >= 10000 THEN 'High Amount'
+        when amount > 5000 and amount < 10000 then 'Midium Amount'
+        ELSE 'Low Amount'
+    END AS AmountStatus
+FROM
+    transactions;
+
+UPDATE transactions
+SET transactiontype = 'deposit'
+WHERE transactionId = 401;
+
+UPDATE transactions
+SET transactiontype = 'withdrawl'
+WHERE transactionId = 402;
+
+UPDATE transactions
+SET transactiontype = 'withdrawl'
+WHERE transactionId = 403;
+
+UPDATE transactions
+SET transactiontype = 'deposit'
+WHERE transactionId = 404;
+
+select * ,
 case
-when balance >= 50000 then "High Value Customer"
-else "Low Value Customer"
-end as CustomerCategory
-from accounts;
+when transactiontype = 'deposit' and amount >= 10000 then 'High Amount'
+when transactiontype = 'deposit' and amount >= 5000 then 'Medium Amount'
+when transactiontype = 'deposit' and amount < 5000 then 'Low Amount'
+Else 'Not Applicable'
+end as 'TransactionCategory'
+from transactions;
+-- STRING FUNCTIONS
+select CustomerID,UPPER(FirstName),UPPER(LastName)
+from customers; -- upper gives o/p in uppercase
+select CustomerID,LOWER(FirstName),LOWER(LastName)
+from customers; -- lower gives o/p in lowercase
+select lastname,length(LastName) from customers; -- length returnes the number of bytes
+select char_length("nagpur"); -- char length returns no of characters
+select length("नागपूर"); -- length returnes the number of bytes
+select char_length("नागपूर");-- char length returns no of characters
+
+select customerid,concat(firstname," ",LastName) as FullName from customers;
+select substring("Hello World",1,5);
+select concat(substring(firstname,1,1),"."," ",LastName) as InitialName from customers;
+
+
