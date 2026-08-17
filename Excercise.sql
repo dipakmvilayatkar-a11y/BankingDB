@@ -45,3 +45,23 @@ ORDER BY CustomerID limit 5 offset 3;
 -- Display Savings accounts having balance between ₹20,000 and ₹80,000.
 select * from accounts where AccountType = "savings" and Balance between 20000 and 80000;
 
+-- Display customer names whose phone number is NULL and account was created after 2025-01-01.
+select * from customers
+where Phone is null and AccountcreationDate > '2025-01-01';
+
+-- Display all customers whose FirstName starts with 'A' OR LastName starts with 'S'.
+select * from customers where firstName like 'A%'or LastName like 'S%';
+
+-- Display all accounts whose AccountType is Savings or Salary and balance is greater than ₹10,000.
+select * from accounts 
+where AccountType = 'saving' or Balance > 40000;
+
+-- Display customers whose CustomerID is IN (101,102,105,109) and phone number is not NULL.
+SELECT * FROM customers
+WHERE CustomerID IN (101,102,105,109) AND Phone IS NOT NULL;
+
+-- Display transactions whose Amount is between ₹2,000 and ₹8,000 and TransactionType is Deposit.
+select * FROM transactions WHERE Amount between 2000 AND 8000 AND TransactionType = 'DEPOSIT';
+
+-- Display distinct BranchIDs from Accounts where balance is greater than ₹30,000.
+select distinct BranchID, from accounts where Balance > 30000;

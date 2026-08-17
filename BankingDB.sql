@@ -486,8 +486,150 @@ select char_length("nagpur"); -- char length returns no of characters
 select length("नागपूर"); -- length returnes the number of bytes
 select char_length("नागपूर");-- char length returns no of characters
 
-select customerid,concat(firstname," ",LastName) as FullName from customers;
-select substring("Hello World",1,5);
+select customerid,concat(firstname," ",LastName) as FullName from customers; -- concat joint the two or more strings
+select substring("Hello World",1,5); -- substring returns the specified part of string
 select concat(substring(firstname,1,1),"."," ",LastName) as InitialName from customers;
 
+-- trim () function to remove leading and trailing spaces
+select length("  Hello World   ");
+select length(trim("  Hello World   "));
+select length(trim(substring("Hello World",6)));
 
+-- Replace() function
+
+select replace("Mat mat Mat","M","C");
+
+select * from accounts;
+-- avg function
+select avg(Balance) from accounts
+where accounttype = "savings";
+
+-- round function
+select round(avg(Balance),2) from accounts
+where accounttype = "savings";
+
+-- ceil function or ceiling function
+select ceil(avg(Balance)) from accounts
+where accounttype = "savings";
+
+-- floor function
+select floor(avg(Balance)) from accounts
+where accounttype = "savings";
+
+-- absolute() function....It removes the sign
+select abs(-3656);
+select abs(-1.23);
+select abs(656);
+
+-- MOD value returns the remainder after division
+select (7/3);
+select mod(7,3);
+
+-- Power ()
+select power(2,3);
+select power(1.5,3);
+
+-- SQRT()
+select sqrt(123);
+select sqrt(144);
+
+SELECT * FROM customers;
+
+-- Date Functions
+-- Now,curdate,curtime Functions
+select now();
+select curdate();
+select curtime();
+
+-- Year(),Month(),Day()
+select year(DateOfBirth)as Year,
+month(DateOfBirth) as Month,
+day(DateOfBirth) as Date 
+from customers;
+
+-- datediff() difference between age
+select concat(firstname," ",LastName)as FullName,dateofbirth,datediff(curdate(),DateofBirth)as Age from customers;
+select concat(firstname," ",LastName)as FullName,dateofbirth,floor(datediff(curdate(),DateofBirth)/365)as Age from customers;
+
+-- Date_Add() adds interval to date
+select concat(firstname," ",LastName)as fullname,accountcreationdate,date_add(accountcreationdate,interval 1 year) as KYCRenewal from customers;
+
+-- Count() Function
+SELECT * FROM customers;
+select count(*) as TotalCustomers from customers;
+select count(Phone) as TotalCustomers from customers;
+
+-- sum() function
+select * from accounts;
+select sum(balance) as savingsbalance from accounts;
+select sum(balance) as savingsbalance from accounts where AccountType = "savings";
+
+-- avg() function
+select * from transactions;
+select avg(amount) from transactions;
+select avg(amount) as AvgAmountDeposited from transactions where TransactionType = "Deposit";
+select avg(amount) as AvgAmountWithdrawl from transactions where TransactionType = "Withdrawl";
+
+-- max() and min() function
+-- find maximum balance in savings account
+select max(balance) from accounts where AccountType = "Savings";
+-- find minimum balance in savings account
+select min(balance) from accounts where AccountType = "Savings";
+
+-- Group By
+select transactiontype, sum(amount)
+from transactions group by (transactiontype);
+
+select * from accounts; -- count accounts, total balance and average balance group by accounttype
+select AccountType,
+     count(*) as TotalAccounts,
+     sum(balance) as TotalBalance,
+     avg(balance) as AvgBalance
+     from accounts
+     group by accounttype;
+     
+     -- find total accounts for specific branch and accounttype
+     select branchID,AccountType,
+     count(*) as noofaccounts from accounts
+     group by BranchID,AccountType
+     order by BranchID;
+     
+     -- Having filters the result of group by
+     select branchID,AccountType,
+     count(*) as noofaccounts from accounts
+     group by BranchID,AccountType
+     having noofaccounts >=2 and AccountType = "savings";
+     
+	-- how many accounts creates in every year
+    Select Count(*)As NoOfAccounts,year(AccountCreationDate) as Years From customers
+    group by Years;
+    
+   -- JOINS in SQL
+  -- INNER JOIN (Matches rows that exist in both tables)
+  -- Find all customers having loans with their names,interest rate and loan amount 
+ SELECT 
+    c.CustomerID,
+    c.FirstName,
+    c.LastName,
+    l.LoanAmount,
+    l.InterestRate
+FROM
+    customers c
+        INNER JOIN
+    loans l ON c.CustomerID = l.customerID;
+  -- find the branch name for all the accoundids
+  -- include accountid,accounttype and branchname,branchaddress
+  SELECT 
+    a.accountid, a.accounttype, b.branchname, b.branchaddress
+FROM
+    accounts a
+        INNER JOIN
+    branches b ON a.BranchID = b.BranchID;
+  
+-- find all the customers(name,phone,accounttype,balance) where accounttype is saving
+select c.firstname,c.lastname,c.phone,a.accounttype,a.balance 
+from customers c 
+inner join 
+accounts a on c.CustomerID = a.CustomerID
+ where AccountType = 'savings';  
+	
